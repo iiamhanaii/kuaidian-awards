@@ -332,7 +332,7 @@ function renderFlowBlock(flow){
       <div class="cat-row">
         ${photo ? `<div style="text-align:center;"><img src="${photo}" alt=""><br><a class="link" href="${photo}" download="flow-${(f.name||'photo').replace(/[^\\w\\u4e00-\\u9fa5]/g,'')}.jpg" style="font-size:11px;">下載照片</a></div>` : ''}
         <div>
-          <div><strong>${f.name||''}</strong> · ${f.product||''} · ${f.method||''}</div>
+          <div><strong>${f.name||''}</strong> · ${f.product||''} · ${f.method||''}${(f.method==='其他' && f.methodOther) ? `（${f.methodOther}）` : ''}</div>
           <div>銷售數量：${f.qty||'-'}</div>
           ${f.videoUrl ? `<div>影片連結：<a class="link" href="${f.videoUrl}" target="_blank">${f.videoUrl}</a></div>` : ''}
         </div>
