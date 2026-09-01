@@ -70,6 +70,25 @@
   }
   .header-inner{max-width:920px; margin:0 auto; position:relative; z-index:1;}
   .container{max-width:920px; margin:0 auto; padding:26px 20px 80px;}
+  .tabbar{max-width:920px; margin:18px auto 0; display:flex; gap:10px; padding:0 20px;}
+  .tab-btn{
+    flex:1; padding:12px 14px; border-radius:12px; border:1.5px solid var(--line);
+    background:var(--white); color:var(--charcoal-dark); font-family:'Noto Sans TC',sans-serif;
+    font-size:14px; font-weight:700; cursor:pointer; transition:background .2s, color .2s;
+  }
+  .tab-btn.active{background:var(--charcoal-dark); color:var(--butter); border-color:var(--charcoal-dark);}
+  .view{display:none;}
+  .view.active{display:block;}
+  .cat-block{margin-bottom:14px;}
+  .cat-block h4{margin:0 0 6px; font-size:14px; color:var(--sage-dark); font-family:'Noto Serif TC',serif;}
+  .cat-row{display:flex; gap:12px; align-items:flex-start; font-size:13.5px;}
+  .cat-row img{width:56px; height:56px; border-radius:8px; object-fit:cover; border:1px solid var(--line);}
+  .empty-note{color:#B7AB9A; font-size:13px; font-style:italic;}
+  .flow-item{border-top:1px dashed var(--line); padding-top:8px; margin-top:8px; font-size:13.5px;}
+  .flow-item:first-child{border-top:none; margin-top:0; padding-top:0;}
+  .no-data{text-align:center; color:#B7AB9A; padding:40px 10px; font-size:14px;}
+  .query-submission{border:1px solid var(--line); border-radius:14px; padding:18px; margin-top:16px; background:var(--white);}
+  .query-meta{font-size:13px; color:var(--mocha); font-weight:700; margin-bottom:12px; border-bottom:1px dashed var(--line); padding-bottom:10px;}
 
   .card{
     background:var(--white);
@@ -185,7 +204,14 @@
   </div>
 </div>
 
+<div class="tabbar">
+  <button class="tab-btn active" data-view="form">填寫提名</button>
+  <button class="tab-btn" data-view="query">查詢我的提名</button>
+</div>
+
 <div class="container">
+
+  <div class="view active" id="view-form">
 
   <div class="card">
     <div class="top-fields">
@@ -288,6 +314,25 @@
     <button type="submit" class="submit-btn" id="submit-btn">送出提名</button>
   </form>
 
+  </div>
+
+  <div class="view" id="view-query">
+    <div class="card">
+      <div class="top-fields">
+        <div class="field">
+          <label>月份</label>
+          <select id="q-month"></select>
+        </div>
+        <div class="field">
+          <label>填表單人</label>
+          <select id="q-submitter"><option value="">請選擇</option></select>
+        </div>
+      </div>
+      <button type="button" class="submit-btn" id="query-btn">查詢</button>
+    </div>
+    <div id="query-results"></div>
+  </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
@@ -314,8 +359,10 @@ function populateMonthSelects(){
     months.push({value:`${y}-${m}`, label:`${y}年${m}月`});
   }
   const cur = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  const sel = $('#f-month');
-  sel.innerHTML = months.map(o=>`<option value="${o.value}" ${o.value===cur?'selected':''}>${o.label}</option>`).join('');
+  const optsHtml = months.map(o=>`<option value="${o.value}" ${o.value===cur?'selected':''}>${o.label}</option>`).join('');
+  $('#f-month').innerHTML = optsHtml;
+  const qMonth = $('#q-month');
+  if(qMonth) qMonth.innerHTML = optsHtml;
 }
 
 function compressImage(file, maxW=900, quality=0.68){
@@ -380,15 +427,19 @@ function addFlowEntry(){
     <div class="grid2">
       <div class="field">
         <label>方式</label>
-        <select data-flow="${id}" data-field="method">
+        <select data-flow="${id}" data-field="method" class="method-select" data-flow-id="${id}">
           <option value="">請選擇</option>
           <option value="IG">IG</option>
-          <option value="Thread">Thread</option>
+          <option value="Threads">Threads</option>
           <option value="團購">團購</option>
           <option value="其他">其他</option>
         </select>
       </div>
       <div class="field"><label>銷售數量</label><input type="number" min="0" data-flow="${id}" data-field="qty" placeholder="數量"></div>
+    </div>
+    <div class="field method-other-field" id="method-other-${id}" style="display:none;">
+      <label>其他方式說明</label>
+      <input type="text" data-flow="${id}" data-field="methodOther" placeholder="請輸入方式說明">
     </div>
     <div class="field"><label>影片連結</label><input type="url" data-flow="${id}" data-field="videoUrl" placeholder="https://..."></div>
     <div class="field">
@@ -407,6 +458,13 @@ function addFlowEntry(){
 
   wrap.querySelector('.remove-entry').addEventListener('click', ()=>{
     wrap.remove();
+  });
+  wrap.querySelector('.method-select').addEventListener('change', (ev)=>{
+    const otherField = document.getElementById(`method-other-${id}`);
+    otherField.style.display = (ev.target.value === '其他') ? 'block' : 'none';
+    if(ev.target.value !== '其他'){
+      otherField.querySelector('input').value = '';
+    }
   });
   wrap.querySelector('.flow-photo-file').addEventListener('change', async (ev)=>{
     const file = ev.target.files[0];
@@ -441,8 +499,10 @@ const SUBMITTERS = [
 ];
 
 function loadSubmitters(){
-  const sel = $('#f-submitter');
-  sel.innerHTML = '<option value="">請選擇</option>' + SUBMITTERS.map(n=>`<option value="${n}">${n}</option>`).join('');
+  const optsHtml = '<option value="">請選擇</option>' + SUBMITTERS.map(n=>`<option value="${n}">${n}</option>`).join('');
+  $('#f-submitter').innerHTML = optsHtml;
+  const qSub = $('#q-submitter');
+  if(qSub) qSub.innerHTML = optsHtml;
 }
 
 /* ---------- FORM SUBMIT ---------- */
@@ -515,6 +575,85 @@ $('#nomination-form').addEventListener('submit', async (e)=>{
   } else {
     showToast('送出失敗，請稍後再試');
   }
+});
+
+/* ---------- TABS ---------- */
+$$('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    $$('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    $$('.view').forEach(v=>v.classList.remove('active'));
+    $('#view-' + btn.dataset.view).classList.add('active');
+  });
+});
+
+/* ---------- QUERY MY SUBMISSIONS ---------- */
+function catLabelQ(key){
+  return {rookie:'🟤 快電新秀', excellence:'🟤 快電卓越', spirit:'🟤 快電精神領袖'}[key];
+}
+
+function renderCatBlockQ(key, d){
+  if(!d || (!d.name && !d.reason)){
+    return `<div class="cat-block"><h4>${catLabelQ(key)}</h4><div class="empty-note">未提名</div></div>`;
+  }
+  const photo = d.photoData || d.photoUrl || '';
+  return `<div class="cat-block"><h4>${catLabelQ(key)}</h4>
+    <div class="cat-row">
+      ${photo ? `<img src="${photo}" alt="">` : ''}
+      <div>
+        <div><strong>${d.name||''}</strong></div>
+        <div style="color:var(--mocha); margin-top:2px;">${(d.reason||'').replace(/\\n/g,'<br>')}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderFlowBlockQ(flow){
+  if(!flow || !flow.length){
+    return `<div class="cat-block"><h4>🟤 流量轉換王</h4><div class="empty-note">未提名</div></div>`;
+  }
+  const items = flow.map(f=>{
+    const photo = f.photoData || f.photoUrl || '';
+    return `<div class="flow-item">
+      <div class="cat-row">
+        ${photo ? `<img src="${photo}" alt="">` : ''}
+        <div>
+          <div><strong>${f.name||''}</strong> · ${f.product||''} · ${f.method||''}${(f.method==='其他' && f.methodOther) ? `（${f.methodOther}）` : ''}</div>
+          <div>銷售數量：${f.qty||'-'}</div>
+          ${f.videoUrl ? `<div>影片連結：<a class="link" href="${f.videoUrl}" target="_blank" style="color:var(--dusty-blue); word-break:break-all;">${f.videoUrl}</a></div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  return `<div class="cat-block"><h4>🟤 流量轉換王（共 ${flow.length} 位）</h4>${items}</div>`;
+}
+
+$('#query-btn').addEventListener('click', async ()=>{
+  const month = $('#q-month').value;
+  const submitter = $('#q-submitter').value;
+  const resultsEl = $('#query-results');
+  if(!month || !submitter){ showToast('請選擇月份與填表單人'); return; }
+
+  resultsEl.innerHTML = '<div class="no-data">查詢中...</div>';
+  const all = (await storageGet(`submissions:${month}`, true)) || [];
+  const mine = all.filter(s => s.submitter === submitter);
+
+  if(!mine.length){
+    resultsEl.innerHTML = '<div class="no-data">這個月份查無妳的提交紀錄</div>';
+    return;
+  }
+
+  resultsEl.innerHTML = mine.map(s=>{
+    const dt = new Date(s.submittedAt);
+    const dtStr = `${dt.getFullYear()}/${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+    return `<div class="query-submission">
+      <div class="query-meta">提交於 ${dtStr}</div>
+      ${renderCatBlockQ('rookie', s.rookie)}
+      ${renderCatBlockQ('excellence', s.excellence)}
+      ${renderCatBlockQ('spirit', s.spirit)}
+      ${renderFlowBlockQ(s.flow)}
+    </div>`;
+  }).join('');
 });
 
 /* ---------- INIT ---------- */
