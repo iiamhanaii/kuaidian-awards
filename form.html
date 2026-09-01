@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>快電商 · 月度頒獎典禮提名表單</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#C4DAE8;
+    --butter:#FEEFB8;
+    --khaki:#C4DAE8;
+    --ivory:#FBF3DE;
+    --cream:#FFF7DC;
+    --white:#FFFFFF;
+    --charcoal:#432F2E;
+    --charcoal-dark:#432F2E;
+    --mocha:#7A6260;
+    --mocha-light:#A88E8B;
+    --sage:#432F2E;
+    --sage-dark:#2E201F;
+    --dusty-blue:#4C7594;
+    --line:#EAE0D2;
+    --danger:#B65C4A;
+    --shadow: 0 8px 24px rgba(67,47,46,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ivory);
+    color:var(--charcoal);
+    font-family:'Noto Sans TC', sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+  }
+  h1,h2,h3,.display{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    color:var(--charcoal-dark);
+    letter-spacing:0.02em;
+  }
+  .header{
+    background:
+      radial-gradient(circle at 15% 22%, rgba(255,255,255,0.9) 0%, transparent 1.5%),
+      radial-gradient(circle at 24% 34%, rgba(214,175,90,0.9) 0%, transparent 1.2%),
+      radial-gradient(circle at 33% 16%, rgba(255,255,255,0.8) 0%, transparent 1%),
+      radial-gradient(circle at 42% 38%, rgba(214,175,90,0.85) 0%, transparent 1.3%),
+      radial-gradient(circle at 52% 20%, rgba(255,255,255,0.75) 0%, transparent 1%),
+      radial-gradient(circle at 61% 42%, rgba(214,175,90,0.85) 0%, transparent 1.2%),
+      radial-gradient(circle at 70% 24%, rgba(255,255,255,0.75) 0%, transparent 1%),
+      radial-gradient(circle at 80% 46%, rgba(214,175,90,0.9) 0%, transparent 1.3%),
+      radial-gradient(circle at 88% 28%, rgba(255,255,255,0.7) 0%, transparent 1%),
+      repeating-linear-gradient(125deg, transparent 0px, transparent 26px, rgba(198,158,78,0.14) 26px, rgba(214,175,90,0.34) 48px, transparent 70px, transparent 110px),
+      linear-gradient(125deg, #FFFFFF 0%, #F8F5EF 45%, #FBF7EC 100%);
+    color:var(--charcoal-dark);
+    padding:28px 20px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  .brand-row{display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .brand-logo{display:flex; align-items:center; margin-bottom:0;}
+  .brand-logo-text{
+    font-family:'Noto Serif TC',serif; font-weight:900; font-size:22px;
+    color:#432F2C; letter-spacing:0.08em;
+  }
+  .brand-divider{width:1.5px; height:32px; background:rgba(60,50,30,0.28); display:inline-block;}
+  .header h1{
+    color:var(--charcoal-dark); font-size:22px; margin:0; letter-spacing:0.04em;
+  }
+  .header-inner{max-width:920px; margin:0 auto; position:relative; z-index:1;}
+  .container{max-width:920px; margin:0 auto; padding:26px 20px 80px;}
+
+  .card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:var(--shadow);
+  }
+  .top-fields{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:640px){.top-fields{grid-template-columns:1fr;}}
+
+  .section-num{
+    display:flex; align-items:baseline; gap:8px; font-family:'Noto Serif TC',serif;
+    font-weight:700; font-size:19px; color:#432F2C; margin-bottom:16px; padding-bottom:14px;
+    border-bottom:1px dashed var(--line);
+  }
+  .section-num .label{font-size:16px; color:#432F2C; font-weight:900;}
+
+  label{display:block; font-size:13px; font-weight:700; color:var(--mocha); margin-bottom:6px; letter-spacing:0.02em;}
+  select, input[type=text], input[type=number], input[type=url], textarea{
+    width:100%; padding:11px 12px; border:1.5px solid var(--line); border-radius:9px;
+    font-family:'Noto Sans TC', sans-serif; font-size:14.5px; color:var(--charcoal-dark);
+    background:var(--ivory); transition:border-color .15s, box-shadow .15s;
+  }
+  select:focus, input:focus, textarea:focus{
+    outline:none; border-color:var(--sage); box-shadow:0 0 0 3px rgba(67,47,46,0.15);
+  }
+  textarea{resize:vertical; min-height:72px;}
+  .field{margin-bottom:14px;}
+
+  .award-section{
+    border-top:4px solid var(--butter);
+    background:var(--white);
+    border-radius:14px;
+    padding:20px 20px 16px;
+    margin-bottom:22px;
+    position:relative;
+  }
+  .award-section.acc-sky{border-top-color:var(--sky);}
+  .award-section.acc-khaki{border-top-color:var(--khaki);}
+  .award-section.acc-flow{border-top-color:#FCE6B7;}
+  .award-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--butter); color:var(--charcoal-dark);
+    padding:5px 14px 5px 10px; border-radius:999px; font-size:12.5px; font-weight:700;
+    margin-bottom:6px; letter-spacing:0.03em;
+  }
+  .award-badge.badge-sky{background:var(--sky);}
+  .award-badge.badge-khaki{background:var(--khaki);}
+  .award-badge.badge-flow{background:#FCE6B7;}
+  .award-badge .badge-star{width:13px; height:13px; display:inline-block;}
+  .award-title{font-size:14px; color:var(--mocha); font-weight:400; margin:2px 0 14px; line-height:1.5;}
+
+  .photo-row{display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start;}
+  .photo-upload{flex:1; min-width:220px;}
+  .photo-preview{
+    width:84px; height:84px; border-radius:10px; border:1.5px dashed var(--line);
+    background:var(--ivory) center/cover no-repeat; display:flex; align-items:center; justify-content:center;
+    color:#B7AB9A; font-size:11px; text-align:center; flex-shrink:0; overflow:hidden;
+  }
+  .file-btn{
+    display:inline-block; padding:9px 14px; border-radius:8px; background:var(--charcoal-dark); color:var(--butter);
+    font-size:13px; font-weight:700; cursor:pointer; border:none;
+  }
+  .file-btn:hover{background:var(--charcoal);}
+  input[type=file]{display:none;}
+  .or-text{font-size:12px; color:#9B8F80; margin:8px 0 6px;}
+
+  .flow-entry{
+    border:1.5px solid var(--line); border-radius:12px; padding:16px; margin-bottom:14px; background:var(--ivory);
+    position:relative;
+  }
+  .flow-entry-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .flow-entry-head .n{font-family:'Noto Serif TC',serif; font-weight:700; color:var(--mocha); font-size:14px;}
+  .remove-entry{background:none; border:none; color:var(--danger); font-size:12.5px; cursor:pointer; font-weight:700;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media (max-width:640px){.grid2{grid-template-columns:1fr;}}
+
+  .add-btn{
+    width:100%; padding:12px; border-radius:10px; border:1.5px dashed var(--sage);
+    background:transparent; color:var(--sage-dark); font-weight:700; cursor:pointer; font-size:14px;
+  }
+  .add-btn:hover{background:rgba(67,47,46,0.06);}
+
+  .submit-btn{
+    width:100%; padding:15px; border-radius:11px; border:none;
+    background:var(--charcoal-dark); color:var(--butter); font-size:16px; font-weight:700;
+    letter-spacing:0.05em; cursor:pointer; margin-top:6px;
+  }
+  .submit-btn:hover{background:var(--charcoal);}
+  .submit-btn:disabled{opacity:0.55; cursor:not-allowed;}
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--charcoal-dark); color:var(--ivory); padding:13px 22px; border-radius:10px;
+    font-size:14px; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:all .25s; z-index:50;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand-row">
+      <div class="brand-logo">
+        <span class="brand-logo-text">C2CBUY</span>
+      </div>
+      <span class="brand-divider"></span>
+      <h1>線上頒獎典禮 · 提名表單</h1>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="top-fields">
+      <div class="field">
+        <label>填寫月份 *</label>
+        <select id="f-month"></select>
+      </div>
+      <div class="field">
+        <label>填表單人 *</label>
+        <select id="f-submitter"><option value="">請選擇</option></select>
+      </div>
+    </div>
+  </div>
+
+  <form id="nomination-form">
+
+    <div class="section-num"><span class="label">【快電新秀提名】</span></div>
+    <div class="award-section acc-sky">
+      <span class="award-badge badge-sky"><svg class="badge-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 6.6L21 10l-5.2 4.3L17.4 21 12 17.3 6.6 21l1.6-6.7L3 10l6.6-1.4L12 2z"/></svg>限一位</span>
+      <div class="award-title">加入未滿一年，卻展現高度潛力與爆發力的新秀代表人物</div>
+      <div class="field">
+        <label>提名原因</label>
+        <textarea data-cat="rookie" data-field="reason" placeholder="說明入選原因"></textarea>
+      </div>
+      <div class="field">
+        <label>姓名</label>
+        <input type="text" data-cat="rookie" data-field="name" placeholder="候選人姓名">
+      </div>
+      <div class="field">
+        <label>照片</label>
+        <div class="photo-row">
+          <div class="photo-preview" id="preview-rookie">尚無照片</div>
+          <div class="photo-upload">
+            <label class="file-btn">上傳照片<input type="file" accept="image/*" data-cat="rookie" class="photo-file"></label>
+            <div class="or-text">或貼上照片網址連結</div>
+            <input type="url" data-cat="rookie" data-field="photoUrl" placeholder="https://...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-num"><span class="label">【快電卓越提名】</span></div>
+    <div class="award-section acc-sky">
+      <span class="award-badge badge-sky"><svg class="badge-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 6.6L21 10l-5.2 4.3L17.4 21 12 17.3 6.6 21l1.6-6.7L3 10l6.6-1.4L12 2z"/></svg>限一位</span>
+      <div class="award-title">當月在銷售或經營成果上創造顯著成長幅度的突破代表</div>
+      <div class="field">
+        <label>提名原因</label>
+        <textarea data-cat="excellence" data-field="reason" placeholder="說明入選原因"></textarea>
+      </div>
+      <div class="field">
+        <label>姓名</label>
+        <input type="text" data-cat="excellence" data-field="name" placeholder="候選人姓名">
+      </div>
+      <div class="field">
+        <label>照片</label>
+        <div class="photo-row">
+          <div class="photo-preview" id="preview-excellence">尚無照片</div>
+          <div class="photo-upload">
+            <label class="file-btn">上傳照片<input type="file" accept="image/*" data-cat="excellence" class="photo-file"></label>
+            <div class="or-text">或貼上照片網址連結</div>
+            <input type="url" data-cat="excellence" data-field="photoUrl" placeholder="https://...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-num"><span class="label">【快電精神領袖提名】</span></div>
+    <div class="award-section acc-khaki">
+      <span class="award-badge badge-khaki"><svg class="badge-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 6.6L21 10l-5.2 4.3L17.4 21 12 17.3 6.6 21l1.6-6.7L3 10l6.6-1.4L12 2z"/></svg>限一位</span>
+      <div class="award-title">出席率、團隊支持、氛圍帶動或貢獻度上，最具代表性的關鍵人物</div>
+      <div class="field">
+        <label>提名原因</label>
+        <textarea data-cat="spirit" data-field="reason" placeholder="說明入選原因"></textarea>
+      </div>
+      <div class="field">
+        <label>姓名</label>
+        <input type="text" data-cat="spirit" data-field="name" placeholder="候選人姓名">
+      </div>
+      <div class="field">
+        <label>照片</label>
+        <div class="photo-row">
+          <div class="photo-preview" id="preview-spirit">尚無照片</div>
+          <div class="photo-upload">
+            <label class="file-btn">上傳照片<input type="file" accept="image/*" data-cat="spirit" class="photo-file"></label>
+            <div class="or-text">或貼上照片網址連結</div>
+            <input type="url" data-cat="spirit" data-field="photoUrl" placeholder="https://...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-num"><span class="label">【流量轉換王提名】</span></div>
+    <div class="award-section acc-flow">
+      <span class="award-badge badge-flow"><svg class="badge-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 6.6L21 10l-5.2 4.3L17.4 21 12 17.3 6.6 21l1.6-6.7L3 10l6.6-1.4L12 2z"/></svg>可多位</span>
+      <div class="award-title">當月透過社群經營、私域流量或團購操作成功銷售超過破百件產品</div>
+      <div id="flow-entries"></div>
+      <button type="button" class="add-btn" id="add-flow-entry">＋ 新增一筆</button>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submit-btn">送出提名</button>
+  </form>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+function showToast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+function populateMonthSelects(){
+  const months = [];
+  const now = new Date();
+  for(let i=-6;i<=3;i++){
+    const d = new Date(now.getFullYear(), now.getMonth()+i, 1);
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    months.push({value:`${y}-${m}`, label:`${y}年${m}月`});
+  }
+  const cur = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const sel = $('#f-month');
+  sel.innerHTML = months.map(o=>`<option value="${o.value}" ${o.value===cur?'selected':''}>${o.label}</option>`).join('');
+}
+
+function compressImage(file, maxW=900, quality=0.68){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if(w > maxW){ h = Math.round(h * (maxW/w)); w = maxW; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ---------- storage layer (Vercel serverless + Redis) ---------- */
+async function storageGet(key, _shared){
+  try{
+    const r = await fetch(`/api/kv?key=${encodeURIComponent(key)}`);
+    const data = await r.json();
+    return data.value ? JSON.parse(data.value) : null;
+  }catch(e){ return null; }
+}
+async function storageSet(key, value, _shared){
+  try{
+    const r = await fetch('/api/kv', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ key, value: JSON.stringify(value) })
+    });
+    return r.ok;
+  }catch(e){ console.error('storage set failed', e); return false; }
+}
+
+/* ---------- FORM STATE ---------- */
+const catData = { rookie:{}, excellence:{}, spirit:{} };
+let flowEntryCount = 0;
+
+function addFlowEntry(){
+  flowEntryCount++;
+  const id = flowEntryCount;
+  const wrap = document.createElement('div');
+  wrap.className = 'flow-entry';
+  wrap.dataset.entryId = id;
+  wrap.innerHTML = `
+    <div class="flow-entry-head">
+      <span class="n">第 ${id} 筆</span>
+      <button type="button" class="remove-entry" data-remove="${id}">移除</button>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>姓名</label><input type="text" data-flow="${id}" data-field="name" placeholder="姓名"></div>
+      <div class="field"><label>商品名稱</label><input type="text" data-flow="${id}" data-field="product" placeholder="商品名稱"></div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>方式</label>
+        <select data-flow="${id}" data-field="method">
+          <option value="">請選擇</option>
+          <option value="IG">IG</option>
+          <option value="Thread">Thread</option>
+          <option value="團購">團購</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      <div class="field"><label>銷售數量</label><input type="number" min="0" data-flow="${id}" data-field="qty" placeholder="數量"></div>
+    </div>
+    <div class="field"><label>影片連結</label><input type="url" data-flow="${id}" data-field="videoUrl" placeholder="https://..."></div>
+    <div class="field">
+      <label>照片</label>
+      <div class="photo-row">
+        <div class="photo-preview" id="flow-preview-${id}">尚無照片</div>
+        <div class="photo-upload">
+          <label class="file-btn">上傳照片<input type="file" accept="image/*" class="flow-photo-file" data-flow="${id}"></label>
+          <div class="or-text">或貼上照片網址連結</div>
+          <input type="url" data-flow="${id}" data-field="photoUrl" placeholder="https://...">
+        </div>
+      </div>
+    </div>
+  `;
+  $('#flow-entries').appendChild(wrap);
+
+  wrap.querySelector('.remove-entry').addEventListener('click', ()=>{
+    wrap.remove();
+  });
+  wrap.querySelector('.flow-photo-file').addEventListener('change', async (ev)=>{
+    const file = ev.target.files[0];
+    if(!file) return;
+    const dataUrl = await compressImage(file);
+    wrap.dataset.photoData = dataUrl;
+    document.getElementById(`flow-preview-${id}`).style.backgroundImage = `url(${dataUrl})`;
+    document.getElementById(`flow-preview-${id}`).textContent = '';
+  });
+}
+
+$('#add-flow-entry').addEventListener('click', addFlowEntry);
+
+$$('.photo-file').forEach(inp=>{
+  inp.addEventListener('change', async (ev)=>{
+    const cat = ev.target.dataset.cat;
+    const file = ev.target.files[0];
+    if(!file) return;
+    const dataUrl = await compressImage(file);
+    catData[cat].photoData = dataUrl;
+    const prev = document.getElementById(`preview-${cat}`);
+    prev.style.backgroundImage = `url(${dataUrl})`;
+    prev.textContent = '';
+  });
+});
+
+const SUBMITTERS = [
+  'AMG-陳瑾', 'RU team-陳巧溱', 'Jolllly-黃喬莉', '17 Team-陳宥希',
+  'BOSS Team-徐鈺婷', 'SP Team-謝佩珊', '公主婊-葉昕蓁', 'JoFun Team-蔡依芳',
+  'MIJ team-王心茹', '富一代-楊晶庭', 'WeKen團隊-卜唯根', '有錢花-樓晨昀',
+  'NUWE team-徐煒淩', '夢想-黃宥豪'
+];
+
+function loadSubmitters(){
+  const sel = $('#f-submitter');
+  sel.innerHTML = '<option value="">請選擇</option>' + SUBMITTERS.map(n=>`<option value="${n}">${n}</option>`).join('');
+}
+
+/* ---------- FORM SUBMIT ---------- */
+$('#nomination-form').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const month = $('#f-month').value;
+  const submitter = $('#f-submitter').value;
+  if(!month){ showToast('請選擇填寫月份'); return; }
+  if(!submitter){ showToast('請選擇填表單人'); return; }
+
+  ['rookie','excellence','spirit'].forEach(cat=>{
+    $$(`[data-cat="${cat}"]`).forEach(el=>{
+      const field = el.dataset.field;
+      if(field) catData[cat][field] = el.value.trim();
+    });
+  });
+
+  for(const cat of ['rookie','excellence','spirit']){
+    const d = catData[cat];
+    if((d.name && !d.reason) || (!d.name && d.reason)){
+      showToast('提名資料未填完整，請確認姓名與提名原因都已填寫');
+      return;
+    }
+  }
+
+  const flowEntries = [];
+  $$('.flow-entry').forEach(wrap=>{
+    const id = wrap.dataset.entryId;
+    const entry = { photoData: wrap.dataset.photoData || '' };
+    $$(`[data-flow="${id}"]`, wrap).forEach(el=>{
+      const field = el.dataset.field;
+      if(field) entry[field] = el.value.trim ? el.value.trim() : el.value;
+    });
+    const hasContent = entry.name || entry.product || entry.qty || entry.videoUrl;
+    if(hasContent) flowEntries.push(entry);
+  });
+
+  const submitBtn = $('#submit-btn');
+  submitBtn.disabled = true; submitBtn.textContent = '送出中...';
+
+  const submission = {
+    id: 'sub_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+    month, submitter,
+    submittedAt: new Date().toISOString(),
+    rookie: {...catData.rookie},
+    excellence: {...catData.excellence},
+    spirit: {...catData.spirit},
+    flow: flowEntries
+  };
+
+  const key = `submissions:${month}`;
+  const existing = (await storageGet(key, true)) || [];
+  existing.push(submission);
+  const ok = await storageSet(key, existing, true);
+
+  submitBtn.disabled = false; submitBtn.textContent = '送出提名';
+
+  if(ok){
+    showToast('提名已送出，感謝填寫！');
+    $('#nomination-form').reset();
+    ['rookie','excellence','spirit'].forEach(cat=>{
+      catData[cat] = {};
+      const prev = document.getElementById(`preview-${cat}`);
+      prev.style.backgroundImage = '';
+      prev.textContent = '尚無照片';
+    });
+    $('#flow-entries').innerHTML = '';
+    flowEntryCount = 0;
+    populateMonthSelects();
+  } else {
+    showToast('送出失敗，請稍後再試');
+  }
+});
+
+/* ---------- INIT ---------- */
+(function init(){
+  populateMonthSelects();
+  addFlowEntry();
+  loadSubmitters();
+})();
+</script>
+</body>
+</html>

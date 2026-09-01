@@ -205,23 +205,29 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'), 2400);
 }
 
-/* ---------- storage layer ---------- */
-async function storageGet(key, shared){
+/* ---------- storage layer (Vercel serverless + Redis) ---------- */
+async function storageGet(key, _shared){
   try{
-    const r = await window.storage.get(key, shared);
-    return r ? JSON.parse(r.value) : null;
+    const r = await fetch(`/api/kv?key=${encodeURIComponent(key)}`);
+    const data = await r.json();
+    return data.value ? JSON.parse(data.value) : null;
   }catch(e){ return null; }
 }
-async function storageSet(key, value, shared){
+async function storageSet(key, value, _shared){
   try{
-    await window.storage.set(key, JSON.stringify(value), shared);
-    return true;
+    const r = await fetch('/api/kv', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ key, value: JSON.stringify(value) })
+    });
+    return r.ok;
   }catch(e){ console.error('storage set failed', e); return false; }
 }
-async function storageListKeys(prefix, shared){
+async function storageListKeys(prefix, _shared){
   try{
-    const r = await window.storage.list(prefix, shared);
-    return r ? r.keys : [];
+    const r = await fetch(`/api/kv?action=list&prefix=${encodeURIComponent(prefix)}`);
+    const data = await r.json();
+    return data.keys || [];
   }catch(e){ return []; }
 }
 
