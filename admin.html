@@ -169,14 +169,6 @@
 
   <div id="admin-panel" style="display:none;">
 
-    <div class="card">
-      <h3 style="margin-top:0;">修改後台密碼</h3>
-      <div class="inline-add">
-        <input type="text" id="new-admin-pass" placeholder="設定新密碼">
-        <button class="btn-secondary" id="change-pass-btn">更新密碼</button>
-      </div>
-    </div>
-
     <div class="admin-toolbar">
       <div class="field">
         <label>篩選月份</label>
@@ -255,14 +247,6 @@ $('#logout-btn').addEventListener('click', ()=>{
   $('#admin-pass-input').value = '';
 });
 
-$('#change-pass-btn').addEventListener('click', async ()=>{
-  const val = $('#new-admin-pass').value.trim();
-  if(!val){ showToast('請輸入新密碼'); return; }
-  await storageSet('admin-password', val, true);
-  $('#new-admin-pass').value = '';
-  showToast('密碼已更新');
-});
-
 $('#refresh-btn').addEventListener('click', refreshAdminData);
 $('#admin-month-filter').addEventListener('change', renderSubmissions);
 
@@ -329,7 +313,7 @@ function renderCatBlock(key, d){
   const photo = d.photoData || d.photoUrl || '';
   return `<div class="cat-block"><h4>${catLabel(key)}</h4>
     <div class="cat-row">
-      ${photo ? `<img src="${photo}" alt="">` : ''}
+      ${photo ? `<div style="text-align:center;"><img src="${photo}" alt=""><br><a class="link" href="${photo}" download="${key}-${(d.name||'photo').replace(/[^\\w\\u4e00-\\u9fa5]/g,'')}.jpg" style="font-size:11px;">下載照片</a></div>` : ''}
       <div>
         <div><strong>${d.name||''}</strong></div>
         <div style="color:var(--mocha); margin-top:2px;">${(d.reason||'').replace(/\\n/g,'<br>')}</div>
@@ -346,7 +330,7 @@ function renderFlowBlock(flow){
     const photo = f.photoData || f.photoUrl || '';
     return `<div class="flow-item">
       <div class="cat-row">
-        ${photo ? `<img src="${photo}" alt="">` : ''}
+        ${photo ? `<div style="text-align:center;"><img src="${photo}" alt=""><br><a class="link" href="${photo}" download="flow-${(f.name||'photo').replace(/[^\\w\\u4e00-\\u9fa5]/g,'')}.jpg" style="font-size:11px;">下載照片</a></div>` : ''}
         <div>
           <div><strong>${f.name||''}</strong> · ${f.product||''} · ${f.method||''}</div>
           <div>銷售數量：${f.qty||'-'}</div>
