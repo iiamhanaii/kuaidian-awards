@@ -170,24 +170,6 @@
   <div id="admin-panel" style="display:none;">
 
     <div class="card">
-      <h3 style="margin-top:0;">填寫月份選項</h3>
-      <div class="roster-list" id="month-list"></div>
-      <div class="inline-add">
-        <input type="text" id="new-month" placeholder="例如：2026年08月">
-        <button class="btn-secondary" id="add-month-btn">新增</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 style="margin-top:0;">填表單人名單</h3>
-      <div class="roster-list" id="roster-list"></div>
-      <div class="inline-add">
-        <input type="text" id="new-submitter" placeholder="新增填表單人姓名">
-        <button class="btn-secondary" id="add-submitter-btn">新增</button>
-      </div>
-    </div>
-
-    <div class="card">
       <h3 style="margin-top:0;">修改後台密碼</h3>
       <div class="inline-add">
         <input type="text" id="new-admin-pass" placeholder="設定新密碼">
@@ -267,58 +249,6 @@ $('#logout-btn').addEventListener('click', ()=>{
   $('#admin-pass-input').value = '';
 });
 
-$('#add-month-btn').addEventListener('click', async ()=>{
-  const val = $('#new-month').value.trim();
-  if(!val) return;
-  const list = (await storageGet('month-options', true)) || [];
-  if(list.includes(val)){ showToast('此月份已存在'); return; }
-  list.push(val);
-  await storageSet('month-options', list, true);
-  $('#new-month').value = '';
-  renderMonthList(list);
-  showToast('已新增');
-});
-
-function renderMonthList(list){
-  const box = $('#month-list');
-  if(!list.length){ box.innerHTML = '<span class="empty-note">尚無月份選項，請於下方新增</span>'; return; }
-  box.innerHTML = list.map(m=>`<span class="roster-chip">${m}<button data-delmonth="${m}">✕</button></span>`).join('');
-  $$('[data-delmonth]', box).forEach(b=>{
-    b.addEventListener('click', async ()=>{
-      let cur = (await storageGet('month-options', true)) || [];
-      cur = cur.filter(x=>x!==b.dataset.delmonth);
-      await storageSet('month-options', cur, true);
-      renderMonthList(cur);
-    });
-  });
-}
-
-$('#add-submitter-btn').addEventListener('click', async ()=>{
-  const name = $('#new-submitter').value.trim();
-  if(!name) return;
-  const list = (await storageGet('submitters', true)) || [];
-  if(list.includes(name)){ showToast('此姓名已存在'); return; }
-  list.push(name);
-  await storageSet('submitters', list, true);
-  $('#new-submitter').value = '';
-  renderRoster(list);
-  showToast('已新增');
-});
-
-function renderRoster(list){
-  const box = $('#roster-list');
-  if(!list.length){ box.innerHTML = '<span class="empty-note">尚無填表單人，請於下方新增</span>'; return; }
-  box.innerHTML = list.map(n=>`<span class="roster-chip">${n}<button data-del="${n}">✕</button></span>`).join('');
-  $$('[data-del]', box).forEach(b=>{
-    b.addEventListener('click', async ()=>{
-      let cur = (await storageGet('submitters', true)) || [];
-      cur = cur.filter(x=>x!==b.dataset.del);
-      await storageSet('submitters', cur, true);
-      renderRoster(cur);
-    });
-  });
-}
-
 $('#change-pass-btn').addEventListener('click', async ()=>{
   const val = $('#new-admin-pass').value.trim();
   if(!val){ showToast('請輸入新密碼'); return; }
@@ -339,7 +269,9 @@ async function populateAdminMonthFilter(){
     return [];
   }
   sel.innerHTML = '<option value="">全部月份</option>' + months.map(m=>{
-    return `<option value="${m}">${m}</option>`;
+    const [y,mo] = m.split('-');
+    const label = (y && mo) ? `${y}年${mo}月` : m;
+    return `<option value="${m}">${label}</option>`;
   }).join('');
   return months;
 }
@@ -423,9 +355,11 @@ function renderFlowBlock(flow){
 function renderSubmissionCard(s){
   const dt = new Date(s.submittedAt);
   const dtStr = `${dt.getFullYear()}/${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+  const [y,mo] = (s.month||'').split('-');
+  const monthLabel = (y && mo) ? `${y}年${mo}月` : (s.month||'');
   return `<div class="submission">
     <div class="submission-head">
-      <span class="meta">${s.month} · 填表人：${s.submitter} · 提交於 ${dtStr}</span>
+      <span class="meta">${monthLabel} · 填表人：${s.submitter} · 提交於 ${dtStr}</span>
       <button class="del" data-month="${s.month}" data-id="${s.id}">刪除</button>
     </div>
     ${renderCatBlock('rookie', s.rookie)}
@@ -436,10 +370,6 @@ function renderSubmissionCard(s){
 }
 
 async function refreshAdminData(){
-  const monthList = (await storageGet('month-options', true)) || [];
-  renderMonthList(monthList);
-  const list = (await storageGet('submitters', true)) || [];
-  renderRoster(list);
   await populateAdminMonthFilter();
   await renderSubmissions();
 }
