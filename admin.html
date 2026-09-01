@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>快電商 · 頒獎典禮提名後台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#C4DAE8;
+    --butter:#FEEFB8;
+    --khaki:#C4DAE8;
+    --ivory:#FBF3DE;
+    --cream:#FFF7DC;
+    --white:#FFFFFF;
+    --charcoal:#432F2E;
+    --charcoal-dark:#432F2E;
+    --mocha:#7A6260;
+    --mocha-light:#A88E8B;
+    --sage:#432F2E;
+    --sage-dark:#2E201F;
+    --dusty-blue:#4C7594;
+    --line:#EAE0D2;
+    --danger:#B65C4A;
+    --shadow: 0 8px 24px rgba(67,47,46,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ivory);
+    color:var(--charcoal);
+    font-family:'Noto Sans TC', sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+  }
+  h1,h2,h3,.display{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    color:var(--charcoal-dark);
+    letter-spacing:0.02em;
+  }
+  .header{
+    background:
+      radial-gradient(circle at 15% 22%, rgba(255,255,255,0.9) 0%, transparent 1.5%),
+      radial-gradient(circle at 24% 34%, rgba(214,175,90,0.9) 0%, transparent 1.2%),
+      radial-gradient(circle at 33% 16%, rgba(255,255,255,0.8) 0%, transparent 1%),
+      radial-gradient(circle at 42% 38%, rgba(214,175,90,0.85) 0%, transparent 1.3%),
+      radial-gradient(circle at 52% 20%, rgba(255,255,255,0.75) 0%, transparent 1%),
+      radial-gradient(circle at 61% 42%, rgba(214,175,90,0.85) 0%, transparent 1.2%),
+      radial-gradient(circle at 70% 24%, rgba(255,255,255,0.75) 0%, transparent 1%),
+      radial-gradient(circle at 80% 46%, rgba(214,175,90,0.9) 0%, transparent 1.3%),
+      radial-gradient(circle at 88% 28%, rgba(255,255,255,0.7) 0%, transparent 1%),
+      repeating-linear-gradient(125deg, transparent 0px, transparent 26px, rgba(198,158,78,0.14) 26px, rgba(214,175,90,0.34) 48px, transparent 70px, transparent 110px),
+      linear-gradient(125deg, #FFFFFF 0%, #F8F5EF 45%, #FBF7EC 100%);
+    color:var(--charcoal-dark);
+    padding:28px 20px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  .brand-row{display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .brand-logo{display:flex; align-items:center; margin-bottom:0;}
+  .brand-logo-text{
+    font-family:'Noto Serif TC',serif; font-weight:900; font-size:22px;
+    color:#432F2C; letter-spacing:0.08em;
+  }
+  .brand-divider{width:1.5px; height:32px; background:rgba(60,50,30,0.28); display:inline-block;}
+  .header h1{
+    color:var(--charcoal-dark); font-size:22px; margin:0; letter-spacing:0.04em;
+  }
+  .header-inner{max-width:920px; margin:0 auto; position:relative; z-index:1;}
+  .container{max-width:920px; margin:0 auto; padding:26px 20px 80px;}
+
+  .card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:var(--shadow);
+  }
+
+  label{display:block; font-size:13px; font-weight:700; color:var(--mocha); margin-bottom:6px; letter-spacing:0.02em;}
+  select, input[type=text]{
+    width:100%; padding:11px 12px; border:1.5px solid var(--line); border-radius:9px;
+    font-family:'Noto Sans TC', sans-serif; font-size:14.5px; color:var(--charcoal-dark);
+    background:var(--ivory); transition:border-color .15s, box-shadow .15s;
+  }
+  select:focus, input:focus{
+    outline:none; border-color:var(--sage); box-shadow:0 0 0 3px rgba(67,47,46,0.15);
+  }
+  .field{margin-bottom:14px;}
+
+  .submit-btn{
+    width:100%; padding:15px; border-radius:11px; border:none;
+    background:var(--charcoal-dark); color:var(--butter); font-size:16px; font-weight:700;
+    letter-spacing:0.05em; cursor:pointer; margin-top:6px;
+  }
+  .submit-btn:hover{background:var(--charcoal);}
+
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--charcoal-dark); color:var(--ivory); padding:13px 22px; border-radius:10px;
+    font-size:14px; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:all .25s; z-index:50;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  .login-box{max-width:360px; margin:60px auto; text-align:center;}
+  .login-box h2{margin-bottom:4px;}
+  .login-box p{color:var(--mocha); font-size:13.5px; margin-top:0;}
+  .admin-toolbar{display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin-bottom:18px;}
+  .admin-toolbar .field{margin-bottom:0; min-width:180px;}
+  .roster-list{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+  .roster-chip{
+    display:flex; align-items:center; gap:6px; background:var(--cream); border:1px solid var(--line);
+    padding:6px 6px 6px 12px; border-radius:999px; font-size:13px;
+  }
+  .roster-chip button{background:none; border:none; color:var(--danger); cursor:pointer; font-size:13px; padding:2px 6px;}
+  .inline-add{display:flex; gap:8px; margin-top:10px;}
+  .inline-add input{flex:1;}
+  .inline-add button{white-space:nowrap;}
+  .btn-secondary{padding:10px 16px; border-radius:9px; border:1.5px solid var(--charcoal-dark); background:var(--white); color:var(--charcoal-dark); font-weight:700; cursor:pointer; font-size:13.5px;}
+  .btn-secondary:hover{background:var(--cream);}
+
+  .submission{
+    border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; background:var(--white);
+  }
+  .submission-head{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px; border-bottom:1px dashed var(--line); padding-bottom:10px;}
+  .submission-head .meta{font-size:13px; color:var(--mocha); font-weight:700;}
+  .submission-head .del{color:var(--danger); background:none; border:none; cursor:pointer; font-size:12.5px; font-weight:700;}
+  .cat-block{margin-bottom:14px;}
+  .cat-block h4{margin:0 0 6px; font-size:14px; color:var(--sage-dark); font-family:'Noto Serif TC',serif;}
+  .cat-row{display:flex; gap:12px; align-items:flex-start; font-size:13.5px;}
+  .cat-row img{width:56px; height:56px; border-radius:8px; object-fit:cover; border:1px solid var(--line);}
+  .empty-note{color:#B7AB9A; font-size:13px; font-style:italic;}
+  .flow-item{border-top:1px dashed var(--line); padding-top:8px; margin-top:8px; font-size:13.5px;}
+  .flow-item:first-child{border-top:none; margin-top:0; padding-top:0;}
+  .no-data{text-align:center; color:#B7AB9A; padding:50px 10px; font-size:14px;}
+
+  .settings-note{font-size:12px; color:#9B8F80; margin-top:16px;}
+  a.link{color:var(--dusty-blue); word-break:break-all;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand-row">
+      <div class="brand-logo">
+        <span class="brand-logo-text">C2CBUY</span>
+      </div>
+      <span class="brand-divider"></span>
+      <h1>頒獎典禮提名 · 管理後台</h1>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div id="admin-login" class="login-box card">
+    <h2>管理後台登入</h2>
+    <p>請輸入後台密碼</p>
+    <div class="field" style="text-align:left;">
+      <input type="text" id="admin-pass-input" placeholder="密碼">
+    </div>
+    <button class="submit-btn" id="admin-login-btn">登入</button>
+    <div class="settings-note" id="admin-login-err" style="color:#B4553F;"></div>
+  </div>
+
+  <div id="admin-panel" style="display:none;">
+
+    <div class="card">
+      <h3 style="margin-top:0;">填寫月份選項</h3>
+      <div class="roster-list" id="month-list"></div>
+      <div class="inline-add">
+        <input type="text" id="new-month" placeholder="例如：2026年08月">
+        <button class="btn-secondary" id="add-month-btn">新增</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">填表單人名單</h3>
+      <div class="roster-list" id="roster-list"></div>
+      <div class="inline-add">
+        <input type="text" id="new-submitter" placeholder="新增填表單人姓名">
+        <button class="btn-secondary" id="add-submitter-btn">新增</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">修改後台密碼</h3>
+      <div class="inline-add">
+        <input type="text" id="new-admin-pass" placeholder="設定新密碼">
+        <button class="btn-secondary" id="change-pass-btn">更新密碼</button>
+      </div>
+    </div>
+
+    <div class="admin-toolbar">
+      <div class="field">
+        <label>篩選月份</label>
+        <select id="admin-month-filter"></select>
+      </div>
+      <button class="btn-secondary" id="refresh-btn">重新整理</button>
+      <button class="btn-secondary" id="logout-btn">登出</button>
+    </div>
+
+    <div id="submissions-list"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+function showToast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+/* ---------- storage layer ---------- */
+async function storageGet(key, shared){
+  try{
+    const r = await window.storage.get(key, shared);
+    return r ? JSON.parse(r.value) : null;
+  }catch(e){ return null; }
+}
+async function storageSet(key, value, shared){
+  try{
+    await window.storage.set(key, JSON.stringify(value), shared);
+    return true;
+  }catch(e){ console.error('storage set failed', e); return false; }
+}
+async function storageListKeys(prefix, shared){
+  try{
+    const r = await window.storage.list(prefix, shared);
+    return r ? r.keys : [];
+  }catch(e){ return []; }
+}
+
+const DEFAULT_PASS = 'kdc2026';
+let adminLoggedIn = false;
+
+$('#admin-login-btn').addEventListener('click', async ()=>{
+  const input = $('#admin-pass-input').value;
+  const storedPass = (await storageGet('admin-password', true)) || DEFAULT_PASS;
+  if(input === storedPass){
+    adminLoggedIn = true;
+    $('#admin-login').style.display = 'none';
+    $('#admin-panel').style.display = 'block';
+    $('#admin-login-err').textContent = '';
+    await refreshAdminData();
+  } else {
+    $('#admin-login-err').textContent = '密碼錯誤，請再試一次';
+  }
+});
+
+$('#logout-btn').addEventListener('click', ()=>{
+  adminLoggedIn = false;
+  $('#admin-login').style.display = 'block';
+  $('#admin-panel').style.display = 'none';
+  $('#admin-pass-input').value = '';
+});
+
+$('#add-month-btn').addEventListener('click', async ()=>{
+  const val = $('#new-month').value.trim();
+  if(!val) return;
+  const list = (await storageGet('month-options', true)) || [];
+  if(list.includes(val)){ showToast('此月份已存在'); return; }
+  list.push(val);
+  await storageSet('month-options', list, true);
+  $('#new-month').value = '';
+  renderMonthList(list);
+  showToast('已新增');
+});
+
+function renderMonthList(list){
+  const box = $('#month-list');
+  if(!list.length){ box.innerHTML = '<span class="empty-note">尚無月份選項，請於下方新增</span>'; return; }
+  box.innerHTML = list.map(m=>`<span class="roster-chip">${m}<button data-delmonth="${m}">✕</button></span>`).join('');
+  $$('[data-delmonth]', box).forEach(b=>{
+    b.addEventListener('click', async ()=>{
+      let cur = (await storageGet('month-options', true)) || [];
+      cur = cur.filter(x=>x!==b.dataset.delmonth);
+      await storageSet('month-options', cur, true);
+      renderMonthList(cur);
+    });
+  });
+}
+
+$('#add-submitter-btn').addEventListener('click', async ()=>{
+  const name = $('#new-submitter').value.trim();
+  if(!name) return;
+  const list = (await storageGet('submitters', true)) || [];
+  if(list.includes(name)){ showToast('此姓名已存在'); return; }
+  list.push(name);
+  await storageSet('submitters', list, true);
+  $('#new-submitter').value = '';
+  renderRoster(list);
+  showToast('已新增');
+});
+
+function renderRoster(list){
+  const box = $('#roster-list');
+  if(!list.length){ box.innerHTML = '<span class="empty-note">尚無填表單人，請於下方新增</span>'; return; }
+  box.innerHTML = list.map(n=>`<span class="roster-chip">${n}<button data-del="${n}">✕</button></span>`).join('');
+  $$('[data-del]', box).forEach(b=>{
+    b.addEventListener('click', async ()=>{
+      let cur = (await storageGet('submitters', true)) || [];
+      cur = cur.filter(x=>x!==b.dataset.del);
+      await storageSet('submitters', cur, true);
+      renderRoster(cur);
+    });
+  });
+}
+
+$('#change-pass-btn').addEventListener('click', async ()=>{
+  const val = $('#new-admin-pass').value.trim();
+  if(!val){ showToast('請輸入新密碼'); return; }
+  await storageSet('admin-password', val, true);
+  $('#new-admin-pass').value = '';
+  showToast('密碼已更新');
+});
+
+$('#refresh-btn').addEventListener('click', refreshAdminData);
+$('#admin-month-filter').addEventListener('change', renderSubmissions);
+
+async function populateAdminMonthFilter(){
+  const keys = await storageListKeys('submissions:', true);
+  const months = keys.map(k=>k.replace('submissions:','')).sort().reverse();
+  const sel = $('#admin-month-filter');
+  if(!months.length){
+    sel.innerHTML = '<option value="">尚無資料</option>';
+    return [];
+  }
+  sel.innerHTML = '<option value="">全部月份</option>' + months.map(m=>{
+    return `<option value="${m}">${m}</option>`;
+  }).join('');
+  return months;
+}
+
+async function renderSubmissions(){
+  const filterMonth = $('#admin-month-filter').value;
+  const listEl = $('#submissions-list');
+  listEl.innerHTML = '<div class="no-data">載入中...</div>';
+
+  let months;
+  if(filterMonth){ months = [filterMonth]; }
+  else { months = await storageListKeys('submissions:', true).then(ks=>ks.map(k=>k.replace('submissions:',''))); }
+
+  let all = [];
+  for(const m of months){
+    const arr = (await storageGet(`submissions:${m}`, true)) || [];
+    all = all.concat(arr);
+  }
+  all.sort((a,b)=> new Date(b.submittedAt) - new Date(a.submittedAt));
+
+  if(!all.length){
+    listEl.innerHTML = '<div class="no-data">尚無提交紀錄</div>';
+    return;
+  }
+
+  listEl.innerHTML = all.map(s => renderSubmissionCard(s)).join('');
+
+  $$('.submission-head .del', listEl).forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      if(!confirm('確定要刪除這筆提名紀錄嗎？')) return;
+      const month = btn.dataset.month;
+      const id = btn.dataset.id;
+      let arr = (await storageGet(`submissions:${month}`, true)) || [];
+      arr = arr.filter(x=>x.id !== id);
+      await storageSet(`submissions:${month}`, arr, true);
+      renderSubmissions();
+    });
+  });
+}
+
+function catLabel(key){
+  return {rookie:'🟤 快電新秀', excellence:'🟤 快電卓越', spirit:'🟤 快電精神領袖'}[key];
+}
+
+function renderCatBlock(key, d){
+  if(!d || (!d.name && !d.reason)){
+    return `<div class="cat-block"><h4>${catLabel(key)}</h4><div class="empty-note">未提名</div></div>`;
+  }
+  const photo = d.photoData || d.photoUrl || '';
+  return `<div class="cat-block"><h4>${catLabel(key)}</h4>
+    <div class="cat-row">
+      ${photo ? `<img src="${photo}" alt="">` : ''}
+      <div>
+        <div><strong>${d.name||''}</strong></div>
+        <div style="color:var(--mocha); margin-top:2px;">${(d.reason||'').replace(/\\n/g,'<br>')}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderFlowBlock(flow){
+  if(!flow || !flow.length){
+    return `<div class="cat-block"><h4>🟤 流量轉換王</h4><div class="empty-note">未提名</div></div>`;
+  }
+  const items = flow.map(f=>{
+    const photo = f.photoData || f.photoUrl || '';
+    return `<div class="flow-item">
+      <div class="cat-row">
+        ${photo ? `<img src="${photo}" alt="">` : ''}
+        <div>
+          <div><strong>${f.name||''}</strong> · ${f.product||''} · ${f.method||''}</div>
+          <div>銷售數量：${f.qty||'-'}</div>
+          ${f.videoUrl ? `<div>影片連結：<a class="link" href="${f.videoUrl}" target="_blank">${f.videoUrl}</a></div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  return `<div class="cat-block"><h4>🟤 流量轉換王（共 ${flow.length} 位）</h4>${items}</div>`;
+}
+
+function renderSubmissionCard(s){
+  const dt = new Date(s.submittedAt);
+  const dtStr = `${dt.getFullYear()}/${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+  return `<div class="submission">
+    <div class="submission-head">
+      <span class="meta">${s.month} · 填表人：${s.submitter} · 提交於 ${dtStr}</span>
+      <button class="del" data-month="${s.month}" data-id="${s.id}">刪除</button>
+    </div>
+    ${renderCatBlock('rookie', s.rookie)}
+    ${renderCatBlock('excellence', s.excellence)}
+    ${renderCatBlock('spirit', s.spirit)}
+    ${renderFlowBlock(s.flow)}
+  </div>`;
+}
+
+async function refreshAdminData(){
+  const monthList = (await storageGet('month-options', true)) || [];
+  renderMonthList(monthList);
+  const list = (await storageGet('submitters', true)) || [];
+  renderRoster(list);
+  await populateAdminMonthFilter();
+  await renderSubmissions();
+}
+</script>
+</body>
+</html>
